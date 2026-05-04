@@ -4,519 +4,143 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>Match Ready</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0a0a0a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Match Ready">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   :root {
-    --bg: #0a0a0a;
-    --surface: #141414;
-    --surface2: #1e1e1e;
-    --border: #2a2a2a;
-    --text: #f0f0f0;
-    --muted: #666;
-    --accent: #e8ff47;
-    --accent-dim: rgba(232,255,71,0.12);
-    --red: #ff4444;
+    --bg: #0a0a0a; --surface: #141414; --surface2: #1e1e1e;
+    --border: #2a2a2a; --text: #f0f0f0; --muted: #666;
+    --accent: #e8ff47; --accent-dim: rgba(232,255,71,0.1);
+    --red: #ff5555;
     --font-display: 'Bebas Neue', sans-serif;
     --font-body: 'DM Sans', sans-serif;
   }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--font-body);
-    min-height: 100vh;
-    max-width: 430px;
-    margin: 0 auto;
-    padding-bottom: 40px;
-  }
+  body { background: var(--bg); color: var(--text); font-family: var(--font-body); min-height: 100vh; max-width: 430px; margin: 0 auto; padding-bottom: 48px; }
 
   /* HEADER */
-  .header {
-    padding: 24px 20px 16px;
-    border-bottom: 1px solid var(--border);
-    position: sticky;
-    top: 0;
-    background: var(--bg);
-    z-index: 100;
-  }
-  .header-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    margin-bottom: 16px;
-  }
-  .app-title {
-    font-family: var(--font-display);
-    font-size: 32px;
-    letter-spacing: 2px;
-    color: var(--text);
-    line-height: 1;
-  }
-  .week-badge {
-    font-size: 11px;
-    font-weight: 500;
-    color: var(--accent);
-    background: var(--accent-dim);
-    padding: 4px 10px;
-    border-radius: 20px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-  }
-
-  /* WEEK TABS */
-  .week-tabs {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 4px;
-  }
-  .week-tab {
-    flex: 1;
-    padding: 8px;
-    background: transparent;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    color: var(--muted);
-    font-family: var(--font-body);
-    font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .week-tab.active {
-    background: var(--accent);
-    border-color: var(--accent);
-    color: #000;
-  }
+  .header { padding: 20px 20px 14px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--bg); z-index: 100; }
+  .header-top { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 14px; }
+  .app-title { font-family: var(--font-display); font-size: 30px; letter-spacing: 2px; line-height: 1; }
+  .week-badge { font-size: 10px; font-weight: 500; color: var(--accent); background: var(--accent-dim); padding: 4px 10px; border-radius: 20px; letter-spacing: 1px; text-transform: uppercase; }
+  .week-tabs { display: flex; gap: 8px; }
+  .week-tab { flex: 1; padding: 8px; background: transparent; border: 1px solid var(--border); border-radius: 8px; color: var(--muted); font-family: var(--font-body); font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+  .week-tab.active { background: var(--accent); border-color: var(--accent); color: #000; }
 
   /* DAY SCROLL */
-  .day-scroll-wrap {
-    padding: 16px 20px 0;
-    overflow-x: auto;
-    scrollbar-width: none;
-  }
+  .day-scroll-wrap { padding: 14px 20px 0; overflow-x: auto; scrollbar-width: none; }
   .day-scroll-wrap::-webkit-scrollbar { display: none; }
-  .day-scroll {
-    display: flex;
-    gap: 10px;
-    min-width: max-content;
-    padding-bottom: 16px;
-  }
-  .day-pill {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-    padding: 10px 16px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    cursor: pointer;
-    transition: all 0.2s;
-    min-width: 64px;
-  }
-  .day-pill:hover { border-color: #444; }
-  .day-pill.active {
-    background: var(--accent);
-    border-color: var(--accent);
-  }
-  .day-pill.rest-day { opacity: 0.4; cursor: default; }
-  .day-pill .day-name {
-    font-size: 10px;
-    font-weight: 500;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
+  .day-scroll { display: flex; gap: 10px; min-width: max-content; padding-bottom: 14px; }
+  .day-pill { display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 10px 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; cursor: pointer; transition: all 0.2s; min-width: 62px; }
+  .day-pill.active { background: var(--accent); border-color: var(--accent); }
+  .day-pill .day-name { font-size: 10px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); }
   .day-pill.active .day-name { color: #000; }
-  .day-pill .day-label {
-    font-family: var(--font-display);
-    font-size: 15px;
-    letter-spacing: 1px;
-    color: var(--text);
-    text-align: center;
-    line-height: 1.1;
-  }
+  .day-pill .day-label { font-family: var(--font-display); font-size: 14px; letter-spacing: 0.5px; color: var(--text); text-align: center; line-height: 1.1; }
   .day-pill.active .day-label { color: #000; }
 
-  /* SESSION HEADER */
-  .session-header {
-    padding: 20px 20px 12px;
-  }
-  .session-type {
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 4px;
-  }
-  .session-title {
-    font-family: var(--font-display);
-    font-size: 28px;
-    letter-spacing: 1px;
-    line-height: 1;
-    margin-bottom: 8px;
-  }
-  .session-meta {
-    display: flex;
-    gap: 16px;
-    font-size: 13px;
-    color: var(--muted);
-  }
-  .session-meta span { display: flex; align-items: center; gap: 4px; }
+  /* SESSION */
+  .session-header { padding: 18px 20px 10px; }
+  .session-type { font-size: 10px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); margin-bottom: 3px; }
+  .session-title { font-family: var(--font-display); font-size: 26px; letter-spacing: 1px; line-height: 1; margin-bottom: 6px; }
+  .session-meta { display: flex; gap: 14px; font-size: 12px; color: var(--muted); }
 
-  /* WARMUP BANNER */
-  .warmup-banner {
-    margin: 0 20px 16px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-left: 3px solid var(--accent);
-    border-radius: 10px;
-    padding: 12px 14px;
-  }
-  .warmup-title {
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 4px;
-  }
-  .warmup-text {
-    font-size: 13px;
-    color: var(--muted);
-    line-height: 1.5;
-  }
+  /* PROGRESS */
+  .session-progress { padding: 0 20px 14px; }
+  .progress-bar-bg { height: 2px; background: var(--border); border-radius: 2px; overflow: hidden; }
+  .progress-bar-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width 0.3s ease; }
+  .progress-text { font-size: 11px; color: var(--muted); margin-top: 5px; }
 
-  /* EXERCISE LIST */
-  .exercise-list {
-    padding: 0 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  /* EXERCISE CARD */
-  .ex-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    overflow: hidden;
-    transition: border-color 0.2s;
-  }
-  .ex-card.done { opacity: 0.45; }
-  .ex-card.done .ex-name { text-decoration: line-through; }
-
-  .ex-card-header {
-    display: flex;
-    align-items: center;
-    padding: 14px 14px 14px 14px;
-    gap: 12px;
-    cursor: pointer;
-  }
-  .ex-number {
-    font-family: var(--font-display);
-    font-size: 20px;
-    color: var(--muted);
-    min-width: 26px;
-    line-height: 1;
-  }
-  .ex-info { flex: 1; }
-  .ex-name {
-    font-size: 15px;
-    font-weight: 500;
-    color: var(--text);
-    margin-bottom: 3px;
-  }
-  .ex-meta {
-    display: flex;
-    gap: 10px;
-    font-size: 12px;
-    color: var(--muted);
-  }
-  .ex-sets-badge {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 2px 8px;
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--text);
-    white-space: nowrap;
-  }
-  .ex-done-btn {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    border: 1.5px solid var(--border);
-    background: transparent;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
-    flex-shrink: 0;
-  }
-  .ex-done-btn.checked {
-    background: var(--accent);
-    border-color: var(--accent);
-  }
-  .ex-done-btn .checkmark { display: none; font-size: 14px; }
-  .ex-done-btn.checked .checkmark { display: block; }
-
-  /* EXPAND PANEL */
-  .ex-expand {
-    display: none;
-    border-top: 1px solid var(--border);
-  }
-  .ex-expand.open { display: block; }
-
-  .ex-gif-wrap {
-    width: 100%;
-    background: #111;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 180px;
-    position: relative;
-  }
-  .ex-gif-wrap img {
-    width: 100%;
-    max-height: 220px;
-    object-fit: contain;
-    display: block;
-  }
-  .gif-loading {
-    position: absolute;
-    font-size: 12px;
-    color: var(--muted);
-  }
-  .gif-fallback {
-    display: none;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 24px;
-    text-align: center;
-  }
-  .gif-fallback.show { display: flex; }
-  .gif-fallback-icon { font-size: 28px; }
-  .gif-fallback-text { font-size: 12px; color: var(--muted); line-height: 1.5; }
-  .gif-search-link {
-    font-size: 12px;
-    color: var(--accent);
-    text-decoration: none;
-    border: 1px solid var(--accent);
-    border-radius: 6px;
-    padding: 5px 12px;
-    margin-top: 4px;
-    display: inline-block;
-  }
-
-  .ex-details {
-    padding: 14px;
-  }
-  .detail-section {
-    margin-bottom: 14px;
-  }
-  .detail-label {
-    font-size: 10px;
-    font-weight: 500;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 6px;
-  }
-  .detail-text {
-    font-size: 13px;
-    color: var(--text);
-    line-height: 1.6;
-  }
-  .form-cues {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-  }
-  .form-cue {
-    display: flex;
-    gap: 8px;
-    font-size: 13px;
-    color: var(--text);
-    line-height: 1.5;
-  }
-  .form-cue::before {
-    content: '—';
-    color: var(--accent);
-    flex-shrink: 0;
-  }
-
-  /* REST TIMER */
-  .rest-timer-wrap {
-    padding: 10px 14px 14px;
-    border-top: 1px solid var(--border);
-  }
-  .rest-timer-label {
-    font-size: 10px;
-    font-weight: 500;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 8px;
-  }
-  .timer-controls {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .timer-display {
-    font-family: var(--font-display);
-    font-size: 36px;
-    letter-spacing: 2px;
-    color: var(--accent);
-    min-width: 80px;
-    line-height: 1;
-  }
-  .timer-display.running { color: var(--text); }
-  .timer-display.done-flash { color: var(--accent); }
-  .timer-btn {
-    padding: 8px 16px;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    background: var(--surface2);
-    color: var(--text);
-    font-family: var(--font-body);
-    font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-  .timer-btn.start { background: var(--accent); border-color: var(--accent); color: #000; }
-  .timer-btn:active { transform: scale(0.97); }
-  .timer-presets {
-    display: flex;
-    gap: 6px;
-    margin-top: 8px;
-  }
-  .preset-btn {
-    flex: 1;
-    padding: 5px;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    color: var(--muted);
-    font-size: 12px;
-    cursor: pointer;
-    transition: all 0.15s;
-    font-family: var(--font-body);
-  }
-  .preset-btn:hover { color: var(--text); border-color: #444; }
-  .preset-btn.selected { border-color: var(--accent); color: var(--accent); }
-
-  /* REST DAY VIEW */
-  .rest-view {
-    padding: 40px 20px;
-    text-align: center;
-  }
-  .rest-icon { font-size: 48px; margin-bottom: 16px; }
-  .rest-title {
-    font-family: var(--font-display);
-    font-size: 32px;
-    letter-spacing: 2px;
-    margin-bottom: 8px;
-  }
-  .rest-subtitle { font-size: 14px; color: var(--muted); line-height: 1.6; }
-
-  /* TOURNAMENT VIEW */
-  .tournament-view {
-    padding: 20px;
-  }
-  .tournament-banner {
-    background: var(--accent);
-    border-radius: 14px;
-    padding: 20px;
-    margin-bottom: 20px;
-    text-align: center;
-  }
-  .tournament-banner .t-label {
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: rgba(0,0,0,0.5);
-    margin-bottom: 4px;
-  }
-  .tournament-banner .t-title {
-    font-family: var(--font-display);
-    font-size: 36px;
-    letter-spacing: 2px;
-    color: #000;
-  }
-
-  .matchday-section { margin-bottom: 20px; }
-  .matchday-heading {
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 10px;
-  }
-  .matchday-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-left: 3px solid var(--accent);
-    border-radius: 10px;
-    padding: 14px;
-    margin-bottom: 8px;
-  }
-  .matchday-card-title {
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--text);
-    margin-bottom: 4px;
-  }
-  .matchday-card-desc {
-    font-size: 13px;
-    color: var(--muted);
-    line-height: 1.5;
-  }
-
-  /* PROGRESS BAR */
-  .session-progress {
-    padding: 0 20px 4px;
-  }
-  .progress-bar-bg {
-    height: 3px;
-    background: var(--border);
-    border-radius: 2px;
-    overflow: hidden;
-  }
-  .progress-bar-fill {
-    height: 100%;
-    background: var(--accent);
-    border-radius: 2px;
-    transition: width 0.3s ease;
-  }
-  .progress-text {
-    font-size: 11px;
-    color: var(--muted);
-    margin-top: 5px;
-  }
+  /* WARMUP */
+  .warmup-banner { margin: 0 20px 14px; background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 10px; padding: 11px 13px; }
+  .warmup-title { font-size: 10px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; color: var(--accent); margin-bottom: 3px; }
+  .warmup-text { font-size: 13px; color: var(--muted); line-height: 1.5; }
 
   /* ANKLE NOTE */
-  .ankle-note {
-    margin: 0 20px 16px;
-    background: rgba(255,68,68,0.08);
-    border: 1px solid rgba(255,68,68,0.2);
-    border-radius: 10px;
-    padding: 10px 14px;
-    font-size: 12px;
-    color: #ff8080;
-    line-height: 1.5;
-  }
+  .ankle-note { margin: 0 20px 14px; background: rgba(255,85,85,0.07); border: 1px solid rgba(255,85,85,0.18); border-radius: 10px; padding: 9px 13px; font-size: 12px; color: #ff8888; line-height: 1.5; }
+
+  /* CARDIO BLOCK */
+  .cardio-block { margin: 0 20px 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 14px; }
+  .cardio-title { font-size: 13px; font-weight: 500; color: var(--accent); margin-bottom: 6px; }
+  .cardio-rounds { font-size: 22px; font-family: var(--font-display); letter-spacing: 1px; color: var(--text); margin-bottom: 4px; }
+  .cardio-detail { font-size: 13px; color: var(--muted); line-height: 1.6; }
+  .cardio-note { font-size: 12px; color: var(--muted); margin-top: 8px; line-height: 1.5; border-top: 1px solid var(--border); padding-top: 8px; }
+  .circuit-label { padding: 0 20px 8px; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); }
+
+  /* EXERCISE LIST */
+  .exercise-list { padding: 0 20px; display: flex; flex-direction: column; gap: 10px; }
+
+  /* EXERCISE CARD */
+  .ex-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; transition: opacity 0.3s; }
+  .ex-card.done { opacity: 0.4; }
+  .ex-card.done .ex-name { text-decoration: line-through; }
+  .ex-card-header { display: flex; align-items: center; padding: 13px; gap: 11px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+  .ex-number { font-family: var(--font-display); font-size: 18px; color: var(--muted); min-width: 24px; line-height: 1; }
+  .ex-info { flex: 1; min-width: 0; }
+  .ex-name { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 2px; }
+  .ex-muscle { font-size: 11px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ex-sets-badge { background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; padding: 3px 8px; font-size: 11px; font-weight: 500; color: var(--text); white-space: nowrap; flex-shrink: 0; }
+  .ex-done-btn { width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid var(--border); background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; flex-shrink: 0; -webkit-tap-highlight-color: transparent; }
+  .ex-done-btn.checked { background: var(--accent); border-color: var(--accent); }
+  .checkmark { display: none; font-size: 13px; color: #000; }
+  .ex-done-btn.checked .checkmark { display: block; }
+
+  /* EXPAND */
+  .ex-expand { display: none; border-top: 1px solid var(--border); }
+  .ex-expand.open { display: block; }
+
+  /* GIF */
+  .ex-gif-wrap { width: 100%; background: #0f0f0f; display: flex; align-items: center; justify-content: center; min-height: 180px; position: relative; overflow: hidden; }
+  .ex-gif-wrap img { width: 100%; max-height: 220px; object-fit: contain; display: block; }
+  .gif-loader { position: absolute; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .gif-spinner { width: 24px; height: 24px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .gif-loader-text { font-size: 11px; color: var(--muted); }
+  .gif-error { display: none; flex-direction: column; align-items: center; gap: 10px; padding: 24px; text-align: center; }
+  .gif-error.show { display: flex; }
+  .gif-error-text { font-size: 12px; color: var(--muted); line-height: 1.5; }
+  .gif-yt-link { font-size: 12px; color: var(--accent); border: 1px solid var(--accent); border-radius: 6px; padding: 6px 14px; text-decoration: none; }
+
+  /* DETAILS */
+  .ex-details { padding: 13px; }
+  .detail-section { margin-bottom: 13px; }
+  .detail-label { font-size: 10px; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 5px; }
+  .detail-text { font-size: 13px; color: var(--text); line-height: 1.6; }
+  .form-cues { display: flex; flex-direction: column; gap: 5px; }
+  .form-cue { display: flex; gap: 8px; font-size: 13px; color: var(--text); line-height: 1.5; }
+  .form-cue::before { content: '—'; color: var(--accent); flex-shrink: 0; }
+
+  /* TIMER */
+  .rest-timer-wrap { padding: 10px 13px 13px; border-top: 1px solid var(--border); }
+  .rest-timer-label { font-size: 10px; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+  .timer-row { display: flex; align-items: center; gap: 10px; }
+  .timer-display { font-family: var(--font-display); font-size: 34px; letter-spacing: 2px; color: var(--accent); min-width: 76px; line-height: 1; }
+  .timer-display.running { color: var(--text); }
+  .timer-btn { padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface2); color: var(--text); font-family: var(--font-body); font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.15s; -webkit-tap-highlight-color: transparent; }
+  .timer-btn.start-btn { background: var(--accent); border-color: var(--accent); color: #000; }
+  .timer-btn:active { transform: scale(0.96); }
+  .timer-presets { display: flex; gap: 6px; margin-top: 8px; }
+  .preset-btn { flex: 1; padding: 5px; background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; color: var(--muted); font-size: 12px; cursor: pointer; font-family: var(--font-body); transition: all 0.15s; -webkit-tap-highlight-color: transparent; }
+  .preset-btn.selected { border-color: var(--accent); color: var(--accent); }
+
+  /* REST / TAPER */
+  .rest-view { padding: 48px 20px; text-align: center; }
+  .rest-icon { font-size: 44px; margin-bottom: 14px; }
+  .rest-title { font-family: var(--font-display); font-size: 30px; letter-spacing: 2px; margin-bottom: 8px; }
+  .rest-subtitle { font-size: 14px; color: var(--muted); line-height: 1.7; }
+
+  /* TOURNAMENT */
+  .tournament-view { padding: 20px; }
+  .tournament-banner { background: var(--accent); border-radius: 14px; padding: 18px; margin-bottom: 18px; text-align: center; }
+  .t-label { font-size: 10px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; color: rgba(0,0,0,0.45); margin-bottom: 3px; }
+  .t-title { font-family: var(--font-display); font-size: 34px; letter-spacing: 2px; color: #000; }
+  .matchday-heading { font-size: 10px; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+  .matchday-card { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 10px; padding: 13px; margin-bottom: 8px; }
+  .matchday-card-title { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
+  .matchday-card-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
 </style>
 </head>
 <body>
@@ -539,6 +163,59 @@
 <div id="main-content"></div>
 
 <script>
+const API_KEY = 'b085b91b15mshdb6519940141d45p1f09acjsn269c41a570cf';
+const API_HOST = 'exercisedb.p.rapidapi.com';
+
+// Exercise name → ExerciseDB search name
+const EXERCISE_SEARCH = {
+  'Barbell Back Squat': 'barbell squat',
+  'Dumbbell Lunges': 'dumbbell lunge',
+  'Cable Pull-Through': 'cable pull through',
+  'Box Step-Ups (Dumbbells)': 'dumbbell step up',
+  'Single Leg Calf Raises': 'calf raise',
+  'Plank': 'plank',
+  'Burpees': 'burpee',
+  'Lateral Shuffles': 'lateral shuffle',
+  'Jump Squats': 'jump squat',
+  'Dumbbell Bench Press': 'dumbbell bench press',
+  'Cable Row (Seated)': 'cable seated row',
+  'Dumbbell Shoulder Press': 'dumbbell shoulder press',
+  'Cable Face Pulls': 'cable face pull',
+  'Dead Bug': 'dead bug',
+  'Russian Twists (Dumbbell)': 'russian twist',
+  'Romanian Deadlift': 'romanian deadlift',
+  'Dumbbell Goblet Squat': 'goblet squat',
+  'Single Leg Balance + Dumbbell Curl': 'dumbbell biceps curl',
+  'Cable Woodchops': 'cable woodchop',
+  'Single Leg Glute Bridge': 'glute bridge',
+  'Side Plank': 'side plank',
+  'Bulgarian Split Squat': 'bulgarian split squat',
+  'Cable Romanian Deadlift': 'romanian deadlift',
+  'Box Step-Ups (Heavier)': 'dumbbell step up',
+  'Plank to Shoulder Tap': 'plank',
+  'Arnold Press (Dumbbells)': 'arnold press',
+  'Pallof Press (Cable)': 'cable pallof press',
+};
+
+const gifCache = {};
+
+async function fetchGif(exerciseName) {
+  if (gifCache[exerciseName]) return gifCache[exerciseName];
+  const query = EXERCISE_SEARCH[exerciseName] || exerciseName.toLowerCase();
+  try {
+    const res = await fetch(
+      `https://exercisedb.p.rapidapi.com/exercises/name/${encodeURIComponent(query)}?limit=1&offset=0`,
+      { headers: { 'X-RapidAPI-Key': API_KEY, 'X-RapidAPI-Host': API_HOST } }
+    );
+    const data = await res.json();
+    if (Array.isArray(data) && data.length > 0 && data[0].gifUrl) {
+      gifCache[exerciseName] = data[0].gifUrl;
+      return data[0].gifUrl;
+    }
+  } catch(e) {}
+  return null;
+}
+
 const PLAN = {
   1: [
     {
@@ -547,103 +224,24 @@ const PLAN = {
       warmup: '5 min brisk treadmill walk + leg swings (10 each leg, forward & lateral)',
       ankleNote: true,
       exercises: [
-        {
-          name: 'Barbell Back Squat',
-          sets: '3 × 10',
-          note: 'Light-medium weight',
-          muscle: 'Quads, glutes, hamstrings',
-          gifQuery: 'barbell+back+squat',
-          gifUrl: 'https://media.giphy.com/media/3o7TKP9ln2Dr6ze6f6/giphy.gif',
-          cues: ['Bar sits on upper traps, not neck', 'Feet shoulder-width, toes slightly out', 'Push knees out as you descend', 'Breathe in on the way down, exhale driving up', 'Hit parallel — thighs level with ground'],
-          breathing: 'Inhale before descent, brace core, exhale on the way up'
-        },
-        {
-          name: 'Dumbbell Lunges',
-          sets: '3 × 10 each leg',
-          note: 'Slow & controlled',
-          muscle: 'Quads, glutes, single-leg balance',
-          gifUrl: 'https://media.giphy.com/media/xT9IgIc0lryrxvqVGM/giphy.gif',
-          cues: ['Step forward, back knee almost touches floor', 'Front shin stays vertical — knee over ankle', 'Keep torso upright, don\'t lean forward', 'Push through front heel to return', 'Control the descent — don\'t crash down'],
-          breathing: 'Inhale as you step forward, exhale as you push back up'
-        },
-        {
-          name: 'Cable Pull-Through',
-          sets: '3 × 12',
-          note: 'Hip hinge movement',
-          muscle: 'Glutes, hamstrings, lower back',
-          gifUrl: 'https://media.giphy.com/media/l0HlHFRbmaZtBRhXG/giphy.gif',
-          cues: ['Stand facing away from cable, rope between legs', 'Hinge at hips — push them back, not squat down', 'Squeeze glutes hard at the top', 'Keep back flat throughout', 'Arms just hold the rope — legs and hips do the work'],
-          breathing: 'Exhale as you drive hips forward and stand tall'
-        },
-        {
-          name: 'Box Step-Ups (Dumbbells)',
-          sets: '3 × 10 each leg',
-          note: 'Use bench or step',
-          muscle: 'Quads, glutes, explosive push-off',
-          gifUrl: 'https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif',
-          cues: ['Step fully onto the box — full foot, not tiptoe', 'Drive through the heel of the elevated foot', 'Don\'t push off the back foot — all work from front leg', 'Stand tall at the top before stepping down', 'Slow controlled descent'],
-          breathing: 'Exhale as you step up, inhale stepping down'
-        },
-        {
-          name: 'Single Leg Calf Raises',
-          sets: '3 × 15 each leg',
-          note: 'Bodyweight — RIGHT ankle focus',
-          muscle: 'Calf, ankle stability',
-          gifUrl: 'https://media.giphy.com/media/3oz8xRF0v9WMAUVLNK/giphy.gif',
-          cues: ['Stand on edge of step for full range', 'Rise all the way up, lower all the way down', 'Go slow — 2 sec up, 2 sec hold, 2 sec down', 'Right ankle: extra slow, feel the control', 'Hold wall lightly for balance only, not support'],
-          breathing: 'Exhale rising up, inhale lowering down'
-        },
-        {
-          name: 'Plank',
-          sets: '3 × 30 sec',
-          note: 'Core stability',
-          muscle: 'Core, shoulders',
-          gifUrl: 'https://media.giphy.com/media/l4FGCymGGNTZVZwtO/giphy.gif',
-          cues: ['Elbows under shoulders, body in a straight line', 'Don\'t let hips sag or pike up', 'Squeeze glutes and core together', 'Breathe normally — don\'t hold breath', 'Eyes to the floor, neutral neck'],
-          breathing: 'Breathe steadily — short controlled breaths'
-        }
+        { name: 'Barbell Back Squat', sets: '3 × 10', note: 'Light-medium weight, focus on form', muscle: 'Quads, glutes, hamstrings', cues: ['Bar sits on upper traps, not neck', 'Feet shoulder-width, toes slightly out', 'Push knees out as you descend', 'Breathe in on the way down, exhale driving up', 'Hit parallel — thighs level with ground'], breathing: 'Inhale before descent, brace core, exhale on the way up' },
+        { name: 'Dumbbell Lunges', sets: '3 × 10 each leg', note: 'Slow & controlled', muscle: 'Quads, glutes, single-leg balance', cues: ['Step forward, back knee almost touches floor', 'Front shin stays vertical — knee over ankle', 'Keep torso upright, don\'t lean forward', 'Push through front heel to return', 'Control the descent — don\'t crash down'], breathing: 'Inhale stepping forward, exhale pushing back up' },
+        { name: 'Cable Pull-Through', sets: '3 × 12', note: 'Hip hinge — not a squat', muscle: 'Glutes, hamstrings, lower back', cues: ['Stand facing away from cable, rope between legs', 'Hinge at hips — push them back', 'Squeeze glutes hard at the top', 'Keep back flat throughout', 'Arms just hold the rope — hips do the work'], breathing: 'Exhale driving hips forward' },
+        { name: 'Box Step-Ups (Dumbbells)', sets: '3 × 10 each leg', note: 'Use bench or step', muscle: 'Quads, glutes, explosive push-off', cues: ['Full foot on the box, not tiptoe', 'Drive through the heel of the elevated foot', 'Don\'t push off the back foot', 'Stand tall at the top', 'Slow controlled descent'], breathing: 'Exhale stepping up, inhale stepping down' },
+        { name: 'Single Leg Calf Raises', sets: '3 × 15 each leg', note: 'RIGHT ankle — extra slow & deliberate', muscle: 'Calf, ankle stability', cues: ['Edge of step for full range', 'Rise all the way up, lower all the way down', '2 sec up, 2 sec hold, 2 sec down', 'Right ankle: feel every millimetre of the movement', 'Hold wall lightly for balance only'], breathing: 'Exhale rising, inhale lowering' },
+        { name: 'Plank', sets: '3 × 30 sec', note: 'Core stability', muscle: 'Core, shoulders', cues: ['Elbows under shoulders, straight line head to heel', 'Don\'t let hips sag or pike', 'Squeeze glutes and core together', 'Breathe steadily — don\'t hold breath', 'Eyes to floor, neutral neck'], breathing: 'Short controlled breaths throughout' },
       ]
     },
     {
-      day: 'Tue', label: 'Cardio\nIntervals', type: 'Anaerobic Training', title: 'Cardio Intervals',
-      meta: ['3 exercises + sprints', '~30 min'],
-      warmup: '5 min brisk treadmill walk before sprints',
+      day: 'Tue', label: 'Cardio', type: 'Anaerobic Training', title: 'Cardio Intervals',
+      meta: ['Sprints + 3 exercises', '~28 min'],
+      warmup: '5 min brisk treadmill walk',
       isCardio: true,
-      cardioBlock: {
-        title: 'Treadmill Sprint Intervals',
-        rounds: 8,
-        work: '30 sec sprint (8–9/10 effort)',
-        rest: '90 sec walk',
-        note: 'This is the most important session. These short explosive repeats are exactly what 5-a-side demands. Push hard on the sprints.'
-      },
+      cardioBlock: { rounds: 8, work: '30 sec sprint (8–9/10 effort)', rest: '90 sec walk', note: 'Most important session. Short explosive repeats are exactly what 5-a-side demands. Push hard on every sprint.' },
       exercises: [
-        {
-          name: 'Burpees',
-          sets: '3 × 8',
-          note: 'Rest 60 sec between sets',
-          muscle: 'Full body, cardiovascular',
-          gifUrl: 'https://media.giphy.com/media/23hPPMRcSLBPBpnqog/giphy.gif',
-          cues: ['Jump feet back to plank — don\'t step', 'Chest touches floor in the push-up', 'Explosive jump up, arms overhead', 'Land soft — absorb with knees', 'Keep moving — no pausing at the bottom'],
-          breathing: 'Exhale on the jump, breathe through the push-up'
-        },
-        {
-          name: 'Lateral Shuffles',
-          sets: '3 × 20 sec',
-          note: 'Mimics defensive positioning',
-          muscle: 'Lateral movement, hips, calves',
-          gifUrl: 'https://media.giphy.com/media/xT9IgvgsRguVEGPHXG/giphy.gif',
-          cues: ['Stay low — defensive stance, knees bent', 'Don\'t cross feet', 'Push off outside foot to change direction', 'Stay on balls of feet', 'Head up — look forward, not down'],
-          breathing: 'Stay relaxed, breathe rhythmically'
-        },
-        {
-          name: 'Jump Squats',
-          sets: '3 × 8',
-          note: 'Land softly — ankle awareness',
-          muscle: 'Explosive legs, power',
-          gifUrl: 'https://media.giphy.com/media/3oEjHZhG9COPG9Y6dq/giphy.gif',
-          cues: ['Squat to parallel first, then explode up', 'Swing arms to generate momentum', 'Land on balls of feet, roll to heels', 'Absorb the landing by bending knees', 'Right ankle: be extra conscious of landing alignment'],
-          breathing: 'Exhale explosively on the jump'
-        }
+        { name: 'Burpees', sets: '3 × 8', note: 'Rest 60 sec between sets', muscle: 'Full body, cardiovascular', cues: ['Jump feet back to plank — don\'t step', 'Chest touches floor', 'Explosive jump up, arms overhead', 'Land soft — absorb with knees', 'Keep moving — no pausing at bottom'], breathing: 'Exhale on the jump' },
+        { name: 'Lateral Shuffles', sets: '3 × 20 sec', note: 'Mimics defensive positioning', muscle: 'Lateral movement, hips', cues: ['Low stance — knees bent, defensive position', 'Don\'t cross your feet', 'Push off outside foot to change direction', 'Stay on balls of feet', 'Head up — look forward'], breathing: 'Stay relaxed, breathe rhythmically' },
+        { name: 'Jump Squats', sets: '3 × 8', note: 'Land SOFT — ankle awareness', muscle: 'Explosive legs, power', cues: ['Squat to parallel first, then explode', 'Swing arms to generate momentum', 'Land on balls of feet, roll to heels', 'Absorb landing by bending knees deeply', 'Right ankle: conscious of landing alignment'], breathing: 'Exhale explosively on the jump' },
       ]
     },
     {
@@ -651,323 +249,101 @@ const PLAN = {
       meta: ['6 exercises', '~35 min'],
       warmup: '5 min brisk walk + arm circles (10 forward, 10 backward)',
       exercises: [
-        {
-          name: 'Dumbbell Bench Press',
-          sets: '3 × 10',
-          note: 'Chest & shoulders',
-          muscle: 'Chest, front deltoids, triceps',
-          gifUrl: 'https://media.giphy.com/media/3oEjI5P7W14cxNi6cg/giphy.gif',
-          cues: ['Dumbbells at chest level, elbows 45° from body', 'Press up and slightly in — don\'t flare elbows wide', 'Full extension at top, don\'t lock elbows', 'Lower slowly — 2 seconds down', 'Feet flat on floor, small arch in lower back'],
-          breathing: 'Inhale on the way down, exhale pressing up'
-        },
-        {
-          name: 'Cable Row (Seated)',
-          sets: '3 × 12',
-          note: 'Upper back & posture',
-          muscle: 'Lats, rhomboids, rear delts',
-          gifUrl: 'https://media.giphy.com/media/3oEjHQgdGYIBmbqyS4/giphy.gif',
-          cues: ['Sit tall, slight lean back at the pull', 'Pull to lower chest — elbows tight to body', 'Squeeze shoulder blades together at peak', 'Control the return — don\'t let it snap forward', 'Keep core braced throughout'],
-          breathing: 'Exhale pulling in, inhale releasing'
-        },
-        {
-          name: 'Dumbbell Shoulder Press',
-          sets: '3 × 10',
-          note: 'Overhead pressing strength',
-          muscle: 'Deltoids, upper traps',
-          gifUrl: 'https://media.giphy.com/media/3oz8xF4BzmyMbGzL96/giphy.gif',
-          cues: ['Start at ear level, elbows at 90°', 'Press straight up — don\'t lean back', 'Don\'t lock elbows at the top', 'Lower slowly and with control', 'Keep core engaged — no arching lower back'],
-          breathing: 'Exhale pressing up, inhale lowering'
-        },
-        {
-          name: 'Cable Face Pulls',
-          sets: '3 × 15',
-          note: 'Rear delts, shoulder health',
-          muscle: 'Rear deltoids, rotator cuff',
-          gifUrl: 'https://media.giphy.com/media/xT9IgG4zH7ZJ3UimWs/giphy.gif',
-          cues: ['Cable at face height, use rope attachment', 'Pull rope toward your face, hands beside ears', 'Elbows high and wide at the pull', 'External rotation at peak — thumbs pointing back', 'This protects your shoulder joint — never skip it'],
-          breathing: 'Exhale pulling toward face'
-        },
-        {
-          name: 'Dead Bug',
-          sets: '3 × 8 each side',
-          note: 'Core stability — not just crunches',
-          muscle: 'Deep core, hip flexors, coordination',
-          gifUrl: 'https://media.giphy.com/media/l4FGni1RBAR0DQXSC/giphy.gif',
-          cues: ['Lie on back, arms up, knees at 90° in the air', 'Lower opposite arm and leg slowly toward floor', 'Lower back MUST stay pressed into floor the whole time', 'Move slow — 3 seconds down, 3 seconds up', 'If back lifts, you\'ve gone too far — reduce range'],
-          breathing: 'Exhale slowly as you extend the limbs out'
-        },
-        {
-          name: 'Russian Twists (Dumbbell)',
-          sets: '3 × 12 each side',
-          note: 'Rotational core for passing & shooting',
-          muscle: 'Obliques, rotational core',
-          gifUrl: 'https://media.giphy.com/media/xT9IgCkFYSYMSKa1Ec/giphy.gif',
-          cues: ['Sit at 45° lean back, feet off floor', 'Rotate from the torso — not just the arms', 'Touch dumbbell to floor each side = 1 rep each', 'Keep chest open, don\'t hunch', 'Slow and controlled beats fast and sloppy'],
-          breathing: 'Exhale on each rotation'
-        }
+        { name: 'Dumbbell Bench Press', sets: '3 × 10', note: 'Chest & shoulder strength', muscle: 'Chest, front deltoids, triceps', cues: ['Dumbbells at chest level, elbows 45° from body', 'Press up and slightly in', 'Full extension at top, don\'t lock elbows', 'Lower slowly — 2 seconds down', 'Feet flat, small arch in lower back'], breathing: 'Inhale lowering, exhale pressing up' },
+        { name: 'Cable Row (Seated)', sets: '3 × 12', note: 'Upper back & posture', muscle: 'Lats, rhomboids, rear delts', cues: ['Sit tall, slight lean back at the pull', 'Pull to lower chest — elbows tight to body', 'Squeeze shoulder blades together at peak', 'Control the return — don\'t let it snap', 'Keep core braced'], breathing: 'Exhale pulling in, inhale releasing' },
+        { name: 'Dumbbell Shoulder Press', sets: '3 × 10', note: 'Overhead strength for duels', muscle: 'Deltoids, upper traps', cues: ['Start at ear level, elbows at 90°', 'Press straight up — don\'t lean back', 'Don\'t lock elbows at top', 'Lower slowly and controlled', 'Core engaged — no arching lower back'], breathing: 'Exhale pressing up, inhale lowering' },
+        { name: 'Cable Face Pulls', sets: '3 × 15', note: 'Shoulder health — never skip this', muscle: 'Rear deltoids, rotator cuff', cues: ['Cable at face height, rope attachment', 'Pull toward face, hands beside ears', 'Elbows high and wide', 'Thumbs pointing back at peak', 'Protects your shoulder joint long-term'], breathing: 'Exhale pulling toward face' },
+        { name: 'Dead Bug', sets: '3 × 8 each side', note: 'Deep core — better than crunches', muscle: 'Deep core, hip flexors, coordination', cues: ['Lie on back, arms up, knees 90° in air', 'Lower opposite arm and leg to floor', 'Lower back MUST stay pressed to floor', '3 seconds down, 3 seconds up', 'If back lifts, reduce your range'], breathing: 'Slow exhale as you extend limbs out' },
+        { name: 'Russian Twists (Dumbbell)', sets: '3 × 12 each side', note: 'Rotational core for passing & shooting', muscle: 'Obliques, rotational core', cues: ['Sit at 45° lean, feet off floor', 'Rotate from torso — not just arms', 'Touch dumbbell to floor each side', 'Keep chest open, don\'t hunch', 'Slow and controlled beats fast'], breathing: 'Exhale on each rotation' },
       ]
     },
     {
       day: 'Thu', label: 'Rest', type: 'Recovery', title: 'Rest Day', isRest: true,
-      restMessage: 'Full rest. Your muscles rebuild on days like this. Light walk is fine. Hydrate well.'
+      restMessage: 'Full rest. Your muscles rebuild on days like this. Light walk is fine. Drink plenty of water and sleep well.'
     },
     {
       day: 'Fri', label: 'Full\nBody', type: 'Full Body + Ankle Stability', title: 'Full Body & Ankle',
       meta: ['6 exercises', '~35 min'],
-      warmup: '5 min brisk treadmill walk + ankle circles (10 each direction, each foot)',
+      warmup: '5 min brisk walk + ankle circles (10 each direction, both feet)',
       ankleNote: true,
       exercises: [
-        {
-          name: 'Romanian Deadlift',
-          sets: '3 × 10',
-          note: 'Hamstrings & lower back',
-          muscle: 'Hamstrings, glutes, lower back',
-          gifUrl: 'https://media.giphy.com/media/3oz8xKaR836UJOYeOc/giphy.gif',
-          cues: ['Hinge at hips — push them back, slight knee bend', 'Bar/dumbbells slide down your thighs', 'Feel the stretch in hamstrings, then drive hips forward', 'Back stays flat — not rounded ever', 'Stop when you feel the stretch, not necessarily floor'],
-          breathing: 'Inhale hinging down, exhale driving hips forward'
-        },
-        {
-          name: 'Dumbbell Goblet Squat',
-          sets: '3 × 12',
-          note: 'Quad dominant, easier on back',
-          muscle: 'Quads, glutes, core',
-          gifUrl: 'https://media.giphy.com/media/xT9IgmDDgNHpJuRkxW/giphy.gif',
-          cues: ['Hold dumbbell vertically at chest, elbows inside knees', 'Sit deep — goblet squat allows more depth', 'Chest stays tall throughout', 'Drive knees out as you descend', 'Heels stay on floor — weight through whole foot'],
-          breathing: 'Inhale descending, exhale driving up'
-        },
-        {
-          name: 'Single Leg Balance + Dumbbell Curl',
-          sets: '3 × 10 each leg',
-          note: 'Ankle stability — right leg extra focus',
-          muscle: 'Ankle stabilisers, biceps, core balance',
-          gifUrl: 'https://media.giphy.com/media/3oEjHZhG9COPbJKS2I/giphy.gif',
-          cues: ['Stand on one leg, slight knee bend', 'Hold position steady before starting curls', 'Curl dumbbells — don\'t let standing leg waver', 'If wobbling, fix gaze on a point on the wall', 'Right ankle: this is your rehab and strength work'],
-          breathing: 'Breathe normally, stay controlled'
-        },
-        {
-          name: 'Cable Woodchops',
-          sets: '3 × 12 each side',
-          note: 'Very football-specific movement',
-          muscle: 'Obliques, rotational power, core',
-          gifUrl: 'https://media.giphy.com/media/xT9IgvBGWBMHCv1BQ4/giphy.gif',
-          cues: ['Cable high, pull diagonally down across body', 'Rotate from the hips and torso — not just arms', 'Pivot back foot on the rotation', 'This movement is your shooting and passing power', 'Control the return — don\'t let cable pull you'],
-          breathing: 'Exhale on the chop downward'
-        },
-        {
-          name: 'Single Leg Glute Bridge',
-          sets: '3 × 12 each leg',
-          note: 'Glute activation + ankle stability',
-          muscle: 'Glutes, hamstrings, ankle stabilisers',
-          gifUrl: 'https://media.giphy.com/media/l4FGkNBKAFyX2DXUQ/giphy.gif',
-          cues: ['Lie back, one foot on floor, other leg raised', 'Drive hips up — squeeze glutes hard at top', 'Keep hips level — don\'t let one side drop', 'Foot stays flat on floor, weight through heel', 'Hold 1 sec at top before lowering'],
-          breathing: 'Exhale driving hips up, inhale lowering'
-        },
-        {
-          name: 'Side Plank',
-          sets: '3 × 20 sec each side',
-          note: 'Lateral core strength',
-          muscle: 'Obliques, shoulder stability, lateral core',
-          gifUrl: 'https://media.giphy.com/media/xT9IgFLBcm3Wi6PGJU/giphy.gif',
-          cues: ['Elbow directly under shoulder', 'Body in a straight line — don\'t let hips drop', 'Stack feet or stagger if needed', 'Push hips up, not just holding them neutral', 'Keep neck neutral — don\'t crane it'],
-          breathing: 'Steady controlled breaths throughout'
-        }
+        { name: 'Romanian Deadlift', sets: '3 × 10', note: 'Hamstrings & lower back', muscle: 'Hamstrings, glutes, lower back', cues: ['Hinge at hips — push them back, slight knee bend', 'Bar slides down your thighs', 'Feel the hamstring stretch, then drive hips forward', 'Back stays flat — never rounded', 'Stop when you feel the stretch'], breathing: 'Inhale hinging down, exhale driving hips forward' },
+        { name: 'Dumbbell Goblet Squat', sets: '3 × 12', note: 'Easier on back, great depth', muscle: 'Quads, glutes, core', cues: ['Hold dumbbell vertically at chest', 'Elbows inside knees at the bottom', 'Sit deep — more depth than back squat', 'Chest stays tall throughout', 'Heels stay on floor — weight through whole foot'], breathing: 'Inhale descending, exhale driving up' },
+        { name: 'Single Leg Balance + Dumbbell Curl', sets: '3 × 10 each leg', note: 'Ankle stability + biceps', muscle: 'Ankle stabilisers, biceps, balance', cues: ['Stand on one leg, slight knee bend', 'Hold position steady before curling', 'Curl dumbbells without wobbling', 'Fix gaze on a point on the wall', 'Right ankle: this is your rehab and strength combined'], breathing: 'Breathe normally, stay in control' },
+        { name: 'Cable Woodchops', sets: '3 × 12 each side', note: 'Most football-specific movement here', muscle: 'Obliques, rotational power', cues: ['Cable high, pull diagonally down across body', 'Rotate from hips and torso — not just arms', 'Pivot back foot on the rotation', 'This is your shooting and passing power', 'Control the return — don\'t let cable pull you'], breathing: 'Exhale on the chop downward' },
+        { name: 'Single Leg Glute Bridge', sets: '3 × 12 each leg', note: 'Glutes + ankle stability', muscle: 'Glutes, hamstrings, ankle stabilisers', cues: ['Lie back, one foot on floor, other leg raised', 'Drive hips up — squeeze glutes hard at top', 'Keep hips level — don\'t let one side drop', 'Weight through heel of planted foot', 'Hold 1 sec at top before lowering'], breathing: 'Exhale driving hips up' },
+        { name: 'Side Plank', sets: '3 × 20 sec each side', note: 'Lateral core strength', muscle: 'Obliques, shoulder stability', cues: ['Elbow directly under shoulder', 'Body in straight line — hips don\'t drop', 'Stack feet or stagger if needed', 'Push hips up actively', 'Keep neck neutral — don\'t crane it'], breathing: 'Steady controlled breaths' },
       ]
     },
     {
       day: 'Sun', label: 'Rest', type: 'Recovery', title: 'Rest Day', isRest: true,
-      restMessage: 'Rest. Good week. Your body is adapting. Drink water. Sleep well.'
-    }
+      restMessage: 'Rest. Good first week. Your body is adapting. Hydrate well and get a full night\'s sleep.'
+    },
   ],
   2: [
     {
-      day: 'Mon', label: 'Legs\n+Core', type: 'Lower Body + Core', title: 'Legs & Core',
+      day: 'Mon', label: 'Legs\nCore', type: 'Lower Body + Core', title: 'Legs & Core',
       meta: ['6 exercises', '~35 min'],
       warmup: '5 min brisk treadmill walk + leg swings',
       ankleNote: true,
       exercises: [
-        {
-          name: 'Barbell Back Squat',
-          sets: '3 × 8',
-          note: 'Add weight vs last week',
-          muscle: 'Quads, glutes, hamstrings',
-          gifUrl: 'https://media.giphy.com/media/3o7TKP9ln2Dr6ze6f6/giphy.gif',
-          cues: ['Same form as Week 1 — slightly heavier now', 'Don\'t sacrifice form for weight', 'Controlled descent, explosive drive up', 'You should feel it more this week — that\'s progress', 'Record the weight you used'],
-          breathing: 'Inhale down, brace core, exhale driving up'
-        },
-        {
-          name: 'Bulgarian Split Squat',
-          sets: '3 × 10 each leg',
-          note: 'Hard — best single leg power exercise',
-          muscle: 'Quads, glutes, single-leg strength',
-          gifUrl: 'https://media.giphy.com/media/xT9IgmDDgNHpJuRkxW/giphy.gif',
-          cues: ['Rear foot on bench, front foot far enough forward', 'Lower until back knee almost touches floor', 'Front knee tracks over toes — don\'t cave in', 'All drive from the front leg', 'This will burn — it\'s the most football-specific strength move'],
-          breathing: 'Inhale descending, exhale driving up through front heel'
-        },
-        {
-          name: 'Cable Romanian Deadlift',
-          sets: '3 × 12',
-          note: 'Hamstrings, hip hinge',
-          muscle: 'Hamstrings, glutes, lower back',
-          gifUrl: 'https://media.giphy.com/media/3oz8xKaR836UJOYeOc/giphy.gif',
-          cues: ['Cable low, hinge at hips with slight knee bend', 'Feel the hamstring stretch, then squeeze glutes forward', 'Back flat always', 'Slower tempo this week — 3 sec down', 'More tension = more benefit'],
-          breathing: 'Inhale hinging, exhale extending'
-        },
-        {
-          name: 'Box Step-Ups (Heavier)',
-          sets: '3 × 10 each leg',
-          note: 'Heavier dumbbells vs Week 1',
-          muscle: 'Quads, glutes, explosive power',
-          gifUrl: 'https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif',
-          cues: ['Same movement, more load', 'Drive through the heel — feel it in the glute', 'Step down slowly and controlled', 'Don\'t use momentum — pure single leg strength'],
-          breathing: 'Exhale stepping up, inhale stepping down'
-        },
-        {
-          name: 'Single Leg Calf Raises',
-          sets: '3 × 15 each leg',
-          note: 'Right ankle — slow & deliberate',
-          muscle: 'Calf, ankle stability',
-          gifUrl: 'https://media.giphy.com/media/3oz8xRF0v9WMAUVLNK/giphy.gif',
-          cues: ['All the same cues as Week 1', 'This week: try without holding wall if stable enough', 'Right ankle: go even slower — own the movement', 'You should feel stronger than last week here'],
-          breathing: 'Exhale rising, inhale lowering'
-        },
-        {
-          name: 'Plank to Shoulder Tap',
-          sets: '3 × 10 each side',
-          note: 'Core + shoulder stability',
-          muscle: 'Core, shoulders, anti-rotation',
-          gifUrl: 'https://media.giphy.com/media/l4FGCymGGNTZVZwtO/giphy.gif',
-          cues: ['Start in high plank (hands, not elbows)', 'Tap opposite shoulder without hips rotating', 'The goal is zero hip movement — resist the rotation', 'Feet wider = more stable if struggling', 'Slow is better than fast here'],
-          breathing: 'Exhale on each tap, stay tight'
-        }
+        { name: 'Barbell Back Squat', sets: '3 × 8', note: 'Add weight vs last week', muscle: 'Quads, glutes, hamstrings', cues: ['Same form as Week 1 — slightly heavier', 'Don\'t sacrifice form for weight', 'Controlled descent, explosive drive up', 'You should feel it more — that\'s progress'], breathing: 'Inhale down, brace, exhale driving up' },
+        { name: 'Bulgarian Split Squat', sets: '3 × 10 each leg', note: 'Hard — best single leg power exercise', muscle: 'Quads, glutes, single-leg strength', cues: ['Rear foot on bench, front foot far forward', 'Lower until back knee almost touches floor', 'Front knee tracks over toes — don\'t cave in', 'All drive from front leg', 'Best football-specific strength move you can do'], breathing: 'Inhale descending, exhale driving up through front heel' },
+        { name: 'Cable Romanian Deadlift', sets: '3 × 12', note: 'Slower tempo this week', muscle: 'Hamstrings, glutes, lower back', cues: ['Cable low, hinge at hips, slight knee bend', 'Feel hamstring stretch, squeeze glutes forward', 'Back flat always', '3 sec down this week — more tension', 'More tension equals more benefit'], breathing: 'Inhale hinging, exhale extending' },
+        { name: 'Box Step-Ups (Heavier)', sets: '3 × 10 each leg', note: 'Heavier dumbbells vs Week 1', muscle: 'Quads, glutes, explosive power', cues: ['Same movement, more load', 'Drive through heel — feel it in glute', 'Step down slowly', 'No momentum — pure single leg strength'], breathing: 'Exhale stepping up, inhale down' },
+        { name: 'Single Leg Calf Raises', sets: '3 × 15 each leg', note: 'Try without wall support if stable', muscle: 'Calf, ankle stability', cues: ['All cues from Week 1', 'This week: try without holding wall', 'Right ankle: go even slower', 'You should feel stronger than last week'], breathing: 'Exhale rising, inhale lowering' },
+        { name: 'Plank to Shoulder Tap', sets: '3 × 10 each side', note: 'Core + anti-rotation', muscle: 'Core, shoulders, anti-rotation', cues: ['High plank — hands not elbows', 'Tap opposite shoulder without hips rotating', 'The goal: zero hip movement', 'Feet wider = more stable if struggling', 'Slow beats fast here'], breathing: 'Exhale on each tap' },
       ]
     },
     {
       day: 'Tue', label: 'Cardio\nSharp', type: 'Anaerobic Training', title: 'Cardio — Sharper',
-      meta: ['3 exercises + sprints', '~30 min'],
+      meta: ['Sprints + 3 exercises', '~30 min'],
       warmup: '5 min brisk walk',
       isCardio: true,
-      cardioBlock: {
-        title: 'Treadmill Sprint Intervals',
-        rounds: 10,
-        work: '40 sec sprint (9/10 effort)',
-        rest: '80 sec walk',
-        note: 'Harder than Week 1. 10 rounds. Push on the sprints — you\'re tapering after this so leave it on the track.'
-      },
+      cardioBlock: { rounds: 10, work: '40 sec sprint (9/10 effort)', rest: '80 sec walk', note: 'Harder than Week 1. 10 rounds. Push on every sprint — you\'re tapering after this so leave everything on the track today.' },
       exercises: [
-        {
-          name: 'Burpees',
-          sets: '3 × 10',
-          note: '2 more than last week',
-          muscle: 'Full body, cardiovascular',
-          gifUrl: 'https://media.giphy.com/media/23hPPMRcSLBPBpnqog/giphy.gif',
-          cues: ['You know the movement now — push the pace', 'Chest to floor every rep', 'Explosive jump at the top', 'If gassing, take the extra rest — quality over speed'],
-          breathing: 'Exhale on the jump'
-        },
-        {
-          name: 'Lateral Shuffles',
-          sets: '3 × 25 sec',
-          note: '5 sec more than last week',
-          muscle: 'Lateral movement, hips',
-          gifUrl: 'https://media.giphy.com/media/xT9IgvgsRguVEGPHXG/giphy.gif',
-          cues: ['Lower stance this week — really sit into it', 'Faster lateral steps', 'Change direction sharply'],
-          breathing: 'Relax and breathe through it'
-        },
-        {
-          name: 'Jump Squats',
-          sets: '3 × 10',
-          note: '2 more than last week',
-          muscle: 'Explosive legs, power',
-          gifUrl: 'https://media.giphy.com/media/3oEjHZhG9COPG9Y6dq/giphy.gif',
-          cues: ['Full squat depth before jumping', 'Max height on the jump', 'Soft landing — right ankle care'],
-          breathing: 'Exhale explosively upward'
-        }
+        { name: 'Burpees', sets: '3 × 10', note: '2 more than last week', muscle: 'Full body, cardiovascular', cues: ['You know the movement — push the pace', 'Chest to floor every rep', 'Explosive jump at top', 'If gassing, take extra rest — quality over speed'], breathing: 'Exhale on the jump' },
+        { name: 'Lateral Shuffles', sets: '3 × 25 sec', note: '5 sec more than last week', muscle: 'Lateral movement, hips', cues: ['Lower stance this week — sit into it', 'Faster lateral steps', 'Sharp direction changes'], breathing: 'Relax and breathe through it' },
+        { name: 'Jump Squats', sets: '3 × 10', note: '2 more than last week', muscle: 'Explosive legs, power', cues: ['Full squat depth before jumping', 'Max height on the jump', 'Soft landing — right ankle care'], breathing: 'Exhale explosively upward' },
       ]
     },
     {
-      day: 'Wed', label: 'Upper\nMobility', type: 'Upper Body + Mobility', title: 'Upper Body & Mobility',
+      day: 'Wed', label: 'Upper\nMob', type: 'Upper Body + Mobility', title: 'Upper Body & Mobility',
       meta: ['6 exercises', '~35 min'],
-      warmup: '5 min walk + arm circles + thoracic rotations',
+      warmup: '5 min walk + arm circles + thoracic rotations (10 each side)',
       exercises: [
-        {
-          name: 'Dumbbell Bench Press',
-          sets: '3 × 10',
-          note: 'Slightly heavier',
-          muscle: 'Chest, front deltoids',
-          gifUrl: 'https://media.giphy.com/media/3oEjI5P7W14cxNi6cg/giphy.gif',
-          cues: ['Add a little weight vs Week 1', 'Same clean form — don\'t compromise it', 'Slow lower, explosive press'],
-          breathing: 'Inhale down, exhale pressing'
-        },
-        {
-          name: 'Cable Row (Seated)',
-          sets: '3 × 12',
-          note: 'Focus on the squeeze',
-          muscle: 'Upper back, lats',
-          gifUrl: 'https://media.giphy.com/media/3oEjHQgdGYIBmbqyS4/giphy.gif',
-          cues: ['This week: really hold the peak contraction — 1 sec squeeze', 'Pull lower — to the navel', 'Sit tall throughout'],
-          breathing: 'Exhale pulling in'
-        },
-        {
-          name: 'Arnold Press (Dumbbells)',
-          sets: '3 × 10',
-          note: 'Full shoulder range',
-          muscle: 'Full deltoid, rotator cuff',
-          gifUrl: 'https://media.giphy.com/media/3oz8xF4BzmyMbGzL96/giphy.gif',
-          cues: ['Start with palms facing you at chin height', 'Rotate palms out as you press up', 'Reverse the rotation on the way down', 'Covers more shoulder range than regular press', 'Controlled — don\'t rush the rotation'],
-          breathing: 'Exhale pressing and rotating up'
-        },
-        {
-          name: 'Cable Face Pulls',
-          sets: '3 × 15',
-          note: 'Shoulder health — never skip',
-          muscle: 'Rear delts, rotator cuff',
-          gifUrl: 'https://media.giphy.com/media/xT9IgG4zH7ZJ3UimWs/giphy.gif',
-          cues: ['Same movement as Week 1', 'Your shoulders will thank you on match day'],
-          breathing: 'Exhale pulling toward face'
-        },
-        {
-          name: 'Pallof Press (Cable)',
-          sets: '3 × 12 each side',
-          note: 'Anti-rotation core — very functional',
-          muscle: 'Core, obliques, anti-rotation stability',
-          gifUrl: 'https://media.giphy.com/media/xT9IgvBGWBMHCv1BQ4/giphy.gif',
-          cues: ['Cable at chest height, stand sideways to it', 'Hold handle at chest, press straight out and hold 1 sec', 'The cable tries to rotate you — resist it completely', 'This is exactly what happens when you shield the ball', 'Hips and shoulders stay square forward'],
-          breathing: 'Exhale pressing out, hold, inhale returning'
-        },
-        {
-          name: 'Dead Bug',
-          sets: '3 × 10 each side',
-          note: '2 more reps than Week 1',
-          muscle: 'Deep core, coordination',
-          gifUrl: 'https://media.giphy.com/media/l4FGni1RBAR0DQXSC/giphy.gif',
-          cues: ['Slower this week — really own the movement', 'Back flat on floor — no exceptions', 'Full extension of arm and leg'],
-          breathing: 'Slow exhale as you extend'
-        }
+        { name: 'Dumbbell Bench Press', sets: '3 × 10', note: 'Slightly heavier than Week 1', muscle: 'Chest, front deltoids', cues: ['Add a little weight', 'Same clean form — never compromise it', 'Slow lower, explosive press'], breathing: 'Inhale lowering, exhale pressing' },
+        { name: 'Cable Row (Seated)', sets: '3 × 12', note: 'Hold peak contraction 1 sec', muscle: 'Upper back, lats', cues: ['Hold the squeeze this week — 1 full second', 'Pull lower — to the navel', 'Sit tall throughout'], breathing: 'Exhale pulling in' },
+        { name: 'Arnold Press (Dumbbells)', sets: '3 × 10', note: 'Full shoulder range of motion', muscle: 'Full deltoid, rotator cuff', cues: ['Start with palms facing you at chin height', 'Rotate palms out as you press up', 'Reverse the rotation coming down', 'Covers more shoulder range than regular press', 'Controlled — don\'t rush the rotation'], breathing: 'Exhale pressing and rotating up' },
+        { name: 'Cable Face Pulls', sets: '3 × 15', note: 'Non-negotiable for shoulder health', muscle: 'Rear delts, rotator cuff', cues: ['Same movement as Week 1', 'Your shoulders will thank you on match day', 'Thumbs pointing back at peak'], breathing: 'Exhale pulling toward face' },
+        { name: 'Pallof Press (Cable)', sets: '3 × 12 each side', note: 'Anti-rotation core — very functional', muscle: 'Core, obliques, anti-rotation stability', cues: ['Cable at chest height, stand sideways to it', 'Hold handle at chest, press straight out', 'Hold 1 sec extended', 'Cable tries to rotate you — resist completely', 'This is exactly what shielding the ball feels like'], breathing: 'Exhale pressing out, inhale returning' },
+        { name: 'Dead Bug', sets: '3 × 10 each side', note: '2 more reps than Week 1', muscle: 'Deep core, coordination', cues: ['Slower this week — own every rep', 'Back flat to floor — no exceptions', 'Full extension of arm and leg'], breathing: 'Slow exhale as you extend' },
       ]
     },
     {
       day: 'Thu', label: 'Rest', type: 'Recovery', title: 'Rest Day', isRest: true,
-      restMessage: 'Rest. Two days until the tournament. Hydrate extra today. Light stretching only.'
+      restMessage: 'Rest. Two days until the tournament. Hydrate extra today. Light stretching only — 10 minutes max. No gym.'
     },
     {
-      day: 'Fri', label: 'Taper', type: 'Pre-Tournament', title: 'Full Rest — Taper',
-      isTaper: true,
-      taperMessage: 'Do not gym today. Your legs need to be completely fresh. A light 10 min walk and gentle stretching is the max. Hydrate well tonight.'
+      day: 'Fri', label: 'Taper', type: 'Pre-Tournament', title: 'Taper — Full Rest', isTaper: true,
+      taperMessage: 'Do not gym today. Your legs need to be completely fresh. A light 10 min walk and gentle stretching is the absolute max. Drink extra water tonight. Sleep early.'
     },
     {
-      day: 'Sat', label: '🏆', type: 'Tournament Day', title: 'Tournament Day', isTournament: true }
+      day: 'Sat', label: '🏆', type: 'Tournament Day', title: 'Tournament Day', isTournament: true,
+    },
   ]
 };
 
 const MATCHDAY = [
-  { title: 'Pre-game warmup (before each match)', desc: '3 min light jog → Leg swings 10 each leg (forward + lateral) → High knees 20 sec → Heel flicks 20 sec → 4× short 10m accelerations, building to full pace' },
-  { title: 'Hydration — non-negotiable', desc: 'Night before: extra water. Morning: 500ml before leaving home. Between games: 300–400ml water + electrolytes (Gatorade, Glucon-D, or ORS). Don\'t wait until thirsty — you\'re already behind by then.' },
-  { title: 'Between games', desc: 'If 40–60 min break: sit, eat something light (banana, biscuits), drink. Stay warm — don\'t let legs stiffen. 5 min light jog before next game. If back-to-back: prioritise hydration and 2 min light leg movement between.' },
-  { title: 'Mental sharpness reminder', desc: 'When you feel slow mentally — it\'s often dehydration. Drink. Take a breath. You\'ve trained the explosive system. Trust it.' }
+  { title: 'Pre-game warmup (before each match)', desc: '3 min light jog → Leg swings 10 each leg (forward + lateral) → High knees 20 sec → Heel flicks 20 sec → 4× short 10m accelerations building to full pace' },
+  { title: 'Hydration — non-negotiable', desc: 'Night before: extra water. Morning: 500ml before leaving home. Between games: 300–400ml water + electrolytes (Gatorade, Glucon-D, or ORS sachets). Don\'t wait until thirsty — by then you\'re already behind.' },
+  { title: 'Between games', desc: 'Sit, eat something light (banana, biscuits), drink. Stay warm — don\'t let legs stiffen. 5 min light jog before the next game. If back-to-back: prioritise hydration and 2 min light leg movement minimum.' },
+  { title: 'When you feel slow mentally', desc: 'It\'s almost always dehydration. Drink water. Take a breath. You\'ve trained the explosive system. Trust it. Composure comes from breathing — slow it down between plays.' },
 ];
 
 let currentWeek = 1;
 let currentDayIndex = 0;
-let timers = {};
+const timerState = {};
 
 function setWeek(w) {
   currentWeek = w;
@@ -980,57 +356,58 @@ function setWeek(w) {
 
 function renderDayScroll() {
   const days = PLAN[currentWeek];
-  const scroll = document.getElementById('day-scroll');
-  scroll.innerHTML = days.map((d, i) => `
-    <div class="day-pill ${i === currentDayIndex ? 'active' : ''} ${(d.isRest||d.isTaper) ? 'rest-day' : ''}"
-         onclick="${(d.isRest||d.isTaper) ? '' : `selectDay(${i})`}; ${(d.isRest||d.isTaper) ? `selectDay(${i})` : ''}">
+  document.getElementById('day-scroll').innerHTML = days.map((d,i) => `
+    <div class="day-pill ${i===currentDayIndex?'active':''}" onclick="selectDay(${i})">
       <span class="day-name">${d.day}</span>
-      <span class="day-label">${d.label}</span>
-    </div>
-  `).join('');
+      <span class="day-label">${d.label.replace('\n','<br>')}</span>
+    </div>`).join('');
 }
 
 function selectDay(i) {
   currentDayIndex = i;
   renderDayScroll();
   renderContent();
-  window.scrollTo({top: 0, behavior: 'smooth'});
+  window.scrollTo({top:0,behavior:'smooth'});
 }
+
+function getDoneKey(ei) { return `done-w${currentWeek}-d${currentDayIndex}-e${ei}`; }
+function isDone(ei) { return localStorage.getItem(getDoneKey(ei)) === '1'; }
 
 function renderContent() {
   const day = PLAN[currentWeek][currentDayIndex];
   const main = document.getElementById('main-content');
 
-  if (day.isRest || day.isTaper) {
-    main.innerHTML = `
-      <div class="rest-view">
-        <div class="rest-icon">${day.isTaper ? '🧘' : '💤'}</div>
-        <div class="rest-title">${day.isTaper ? 'TAPER DAY' : 'REST DAY'}</div>
-        <div class="rest-subtitle">${day.isTaper ? day.taperMessage : day.restMessage}</div>
-      </div>`;
+  if (day.isRest) {
+    main.innerHTML = `<div class="rest-view"><div class="rest-icon">💤</div><div class="rest-title">REST DAY</div><div class="rest-subtitle">${day.restMessage}</div></div>`;
     return;
   }
-
+  if (day.isTaper) {
+    main.innerHTML = `<div class="rest-view"><div class="rest-icon">🧘</div><div class="rest-title">TAPER DAY</div><div class="rest-subtitle">${day.taperMessage}</div></div>`;
+    return;
+  }
   if (day.isTournament) {
-    renderTournamentView(main);
+    main.innerHTML = `<div class="tournament-view">
+      <div class="tournament-banner"><div class="t-label">Weekend</div><div class="t-title">TOURNAMENT 🏆</div></div>
+      <div class="matchday-heading">Match Day Protocol</div>
+      ${MATCHDAY.map(m=>`<div class="matchday-card"><div class="matchday-card-title">${m.title}</div><div class="matchday-card-desc">${m.desc}</div></div>`).join('')}
+    </div>`;
     return;
   }
 
-  const total = day.exercises.length;
-  const done = day.exercises.filter((_, ei) => localStorage.getItem(`done-w${currentWeek}-d${currentDayIndex}-e${ei}`) === '1').length;
-  const pct = total > 0 ? Math.round((done/total)*100) : 0;
+  const exs = day.exercises;
+  const total = exs.length;
+  const doneCount = exs.filter((_,i)=>isDone(i)).length;
+  const pct = total > 0 ? Math.round(doneCount/total*100) : 0;
 
   let html = `
     <div class="session-header">
       <div class="session-type">${day.type}</div>
       <div class="session-title">${day.title}</div>
-      <div class="session-meta">
-        ${day.meta.map(m => `<span>${m}</span>`).join('')}
-      </div>
+      <div class="session-meta">${day.meta.map(m=>`<span>${m}</span>`).join('')}</div>
     </div>
     <div class="session-progress">
       <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
-      <div class="progress-text">${done}/${total} exercises done</div>
+      <div class="progress-text">${doneCount}/${total} exercises done</div>
     </div>
     <div class="warmup-banner">
       <div class="warmup-title">Warmup First</div>
@@ -1038,219 +415,187 @@ function renderContent() {
     </div>`;
 
   if (day.ankleNote) {
-    html += `<div class="ankle-note">⚠ Right ankle: repeated ligament history. Extra care on single-leg work. Never rush ankle exercises. Land softly on jump movements.</div>`;
+    html += `<div class="ankle-note">⚠ Right ankle has repeated ligament history. Extra care on single-leg work. Land softly on all jump movements. Never rush ankle exercises.</div>`;
   }
 
   if (day.isCardio && day.cardioBlock) {
     const cb = day.cardioBlock;
-    html += `
-      <div style="margin: 0 20px 16px;">
-        <div class="ex-card">
-          <div class="ex-card-header" style="cursor:default">
-            <div class="ex-info">
-              <div class="ex-name" style="color: var(--accent)">${cb.title}</div>
-              <div style="font-size:13px;color:var(--muted);margin-top:4px;line-height:1.6">
-                <strong style="color:var(--text)">${cb.rounds} rounds</strong> — ${cb.work} → ${cb.rest}
-              </div>
-              <div style="font-size:12px;color:var(--muted);margin-top:6px;line-height:1.5">${cb.note}</div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div style="padding: 0 20px 8px; font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted)">Then — Circuit</div>`;
+    html += `<div class="cardio-block">
+      <div class="cardio-title">Treadmill Sprint Intervals</div>
+      <div class="cardio-rounds">${cb.rounds} ROUNDS</div>
+      <div class="cardio-detail"><strong style="color:var(--text)">${cb.work}</strong><br>${cb.rest}</div>
+      <div class="cardio-note">${cb.note}</div>
+    </div>
+    <div class="circuit-label">Then — Circuit</div>`;
   }
 
   html += `<div class="exercise-list">`;
-  day.exercises.forEach((ex, ei) => {
-    const doneKey = `done-w${currentWeek}-d${currentDayIndex}-e${ei}`;
-    const isDone = localStorage.getItem(doneKey) === '1';
-    html += buildExCard(ex, ei, isDone);
-  });
+  exs.forEach((ex,ei) => { html += buildExCard(ex, ei, isDone(ei)); });
   html += `</div>`;
-
   main.innerHTML = html;
 }
 
-function buildExCard(ex, ei, isDone) {
-  return `
-    <div class="ex-card ${isDone ? 'done' : ''}" id="excard-${ei}">
-      <div class="ex-card-header" onclick="toggleExpand(${ei})">
-        <div class="ex-number">0${ei+1}</div>
-        <div class="ex-info">
-          <div class="ex-name">${ex.name}</div>
-          <div class="ex-meta">
-            <span>${ex.muscle}</span>
-          </div>
-        </div>
-        <div class="ex-sets-badge">${ex.sets}</div>
-        <button class="ex-done-btn ${isDone ? 'checked' : ''}" onclick="toggleDone(event, ${ei})" id="donebtn-${ei}">
-          <span class="checkmark">✓</span>
-        </button>
+function buildExCard(ex, ei, done) {
+  return `<div class="ex-card ${done?'done':''}" id="excard-${ei}">
+    <div class="ex-card-header" onclick="toggleExpand(${ei})">
+      <div class="ex-number">0${ei+1}</div>
+      <div class="ex-info">
+        <div class="ex-name">${ex.name}</div>
+        <div class="ex-muscle">${ex.muscle}</div>
       </div>
-      <div class="ex-expand" id="expand-${ei}">
-        <div class="ex-gif-wrap" id="gifwrap-${ei}">
-          <span class="gif-loading">Loading...</span>
-          <img src="${ex.gifUrl}" alt="${ex.name}" 
-               onload="document.getElementById('gifwrap-${ei}').querySelector('.gif-loading').style.display='none'"
-               onerror="handleGifError(${ei}, '${encodeURIComponent(ex.name)}')"
-               style="display:block">
-          <div class="gif-fallback" id="fallback-${ei}">
-            <div class="gif-fallback-icon">🎬</div>
-            <div class="gif-fallback-text">GIF unavailable</div>
-            <a class="gif-search-link" id="giflink-${ei}" target="_blank">Search on YouTube ↗</a>
-          </div>
+      <div class="ex-sets-badge">${ex.sets}</div>
+      <button class="ex-done-btn ${done?'checked':''}" id="donebtn-${ei}" onclick="toggleDone(event,${ei})">
+        <span class="checkmark">✓</span>
+      </button>
+    </div>
+    <div class="ex-expand" id="expand-${ei}">
+      <div class="ex-gif-wrap" id="gifwrap-${ei}">
+        <div class="gif-loader" id="gifloader-${ei}">
+          <div class="gif-spinner"></div>
+          <div class="gif-loader-text">Loading GIF…</div>
         </div>
-        <div class="ex-details">
-          ${ex.note ? `<div class="detail-section"><div class="detail-label">Note</div><div class="detail-text">${ex.note}</div></div>` : ''}
-          <div class="detail-section">
-            <div class="detail-label">Form Cues</div>
-            <div class="form-cues">
-              ${ex.cues.map(c => `<div class="form-cue">${c}</div>`).join('')}
-            </div>
+        <img id="gifimg-${ei}" src="" alt="${ex.name}" style="display:none"
+          onload="gifLoaded(${ei})" onerror="gifFailed(${ei})">
+        <div class="gif-error" id="giferr-${ei}">
+          <div class="gif-error-text">GIF unavailable</div>
+          <a class="gif-yt-link" href="https://www.youtube.com/results?search_query=how+to+${encodeURIComponent(ex.name)}+exercise+form" target="_blank">Search on YouTube ↗</a>
+        </div>
+      </div>
+      <div class="ex-details">
+        ${ex.note ? `<div class="detail-section"><div class="detail-label">Note</div><div class="detail-text">${ex.note}</div></div>` : ''}
+        <div class="detail-section">
+          <div class="detail-label">Form Cues</div>
+          <div class="form-cues">${ex.cues.map(c=>`<div class="form-cue">${c}</div>`).join('')}</div>
+        </div>
+        <div class="detail-section">
+          <div class="detail-label">Breathing</div>
+          <div class="detail-text">${ex.breathing}</div>
+        </div>
+        <div class="rest-timer-wrap">
+          <div class="rest-timer-label">Rest Timer</div>
+          <div class="timer-row">
+            <div class="timer-display" id="timer-${ei}">0:45</div>
+            <button class="timer-btn start-btn" id="tbtn-${ei}" onclick="handleTimer(${ei})">Start</button>
+            <button class="timer-btn" onclick="resetTimer(${ei})">Reset</button>
           </div>
-          <div class="detail-section">
-            <div class="detail-label">Breathing</div>
-            <div class="detail-text">${ex.breathing}</div>
-          </div>
-          <div class="rest-timer-wrap">
-            <div class="rest-timer-label">Rest Timer</div>
-            <div class="timer-controls">
-              <div class="timer-display" id="timer-${ei}">0:45</div>
-              <button class="timer-btn start" id="timerbtn-${ei}" onclick="handleTimer(${ei})">Start</button>
-              <button class="timer-btn" onclick="resetTimer(${ei})">Reset</button>
-            </div>
-            <div class="timer-presets">
-              <button class="preset-btn selected" onclick="setPreset(${ei}, 45, this)">45s</button>
-              <button class="preset-btn" onclick="setPreset(${ei}, 60, this)">60s</button>
-              <button class="preset-btn" onclick="setPreset(${ei}, 90, this)">90s</button>
-            </div>
+          <div class="timer-presets">
+            <button class="preset-btn selected" onclick="setPreset(${ei},45,this)">45s</button>
+            <button class="preset-btn" onclick="setPreset(${ei},60,this)">60s</button>
+            <button class="preset-btn" onclick="setPreset(${ei},90,this)">90s</button>
           </div>
         </div>
       </div>
-    </div>`;
-}
-
-function handleGifError(ei, name) {
-  const wrap = document.getElementById(`gifwrap-${ei}`);
-  if (!wrap) return;
-  wrap.querySelector('img').style.display = 'none';
-  wrap.querySelector('.gif-loading').style.display = 'none';
-  const fb = document.getElementById(`fallback-${ei}`);
-  fb.classList.add('show');
-  const link = document.getElementById(`giflink-${ei}`);
-  link.href = `https://www.youtube.com/results?search_query=how+to+do+${name}+exercise+form`;
+    </div>
+  </div>`;
 }
 
 function toggleExpand(ei) {
   const panel = document.getElementById(`expand-${ei}`);
-  panel.classList.toggle('open');
+  const isOpen = panel.classList.toggle('open');
+  if (isOpen) loadGif(ei);
+}
+
+async function loadGif(ei) {
+  const day = PLAN[currentWeek][currentDayIndex];
+  const ex = day.exercises[ei];
+  const img = document.getElementById(`gifimg-${ei}`);
+  if (img.src && img.src !== window.location.href) return;
+  const url = await fetchGif(ex.name);
+  if (url) {
+    img.src = url;
+  } else {
+    gifFailed(ei);
+  }
+}
+
+function gifLoaded(ei) {
+  document.getElementById(`gifloader-${ei}`).style.display = 'none';
+  document.getElementById(`gifimg-${ei}`).style.display = 'block';
+}
+
+function gifFailed(ei) {
+  document.getElementById(`gifloader-${ei}`).style.display = 'none';
+  document.getElementById(`gifimg-${ei}`).style.display = 'none';
+  document.getElementById(`giferr-${ei}`).classList.add('show');
 }
 
 function toggleDone(e, ei) {
   e.stopPropagation();
-  const key = `done-w${currentWeek}-d${currentDayIndex}-e${ei}`;
-  const current = localStorage.getItem(key) === '1';
-  localStorage.setItem(key, current ? '0' : '1');
-  const card = document.getElementById(`excard-${ei}`);
-  const btn = document.getElementById(`donebtn-${ei}`);
-  card.classList.toggle('done', !current);
-  btn.classList.toggle('checked', !current);
-  // update progress
+  const key = getDoneKey(ei);
+  const val = localStorage.getItem(key) === '1';
+  localStorage.setItem(key, val ? '0' : '1');
+  document.getElementById(`excard-${ei}`).classList.toggle('done', !val);
+  document.getElementById(`donebtn-${ei}`).classList.toggle('checked', !val);
   const day = PLAN[currentWeek][currentDayIndex];
   const total = day.exercises.length;
-  const done = day.exercises.filter((_, i) => localStorage.getItem(`done-w${currentWeek}-d${currentDayIndex}-e${i}`) === '1').length;
-  const pct = Math.round((done/total)*100);
+  const doneCount = day.exercises.filter((_,i)=>isDone(i)).length;
+  const pct = Math.round(doneCount/total*100);
   const fill = document.querySelector('.progress-bar-fill');
   const text = document.querySelector('.progress-text');
-  if (fill) fill.style.width = pct + '%';
-  if (text) text.textContent = `${done}/${total} exercises done`;
+  if (fill) fill.style.width = pct+'%';
+  if (text) text.textContent = `${doneCount}/${total} exercises done`;
 }
 
-// TIMER
-const timerState = {};
+function formatTime(s) { return `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`; }
 
 function setPreset(ei, secs, btn) {
   resetTimer(ei);
   timerState[ei] = timerState[ei] || {};
   timerState[ei].duration = secs;
-  const display = document.getElementById(`timer-${ei}`);
-  display.textContent = formatTime(secs);
-  btn.closest('.timer-presets').querySelectorAll('.preset-btn').forEach(b => b.classList.remove('selected'));
+  timerState[ei].remaining = secs;
+  document.getElementById(`timer-${ei}`).textContent = formatTime(secs);
+  btn.closest('.timer-presets').querySelectorAll('.preset-btn').forEach(b=>b.classList.remove('selected'));
   btn.classList.add('selected');
 }
 
-function formatTime(s) {
-  return `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;
-}
-
 function handleTimer(ei) {
-  const state = timerState[ei] || {};
-  if (state.running) {
-    clearInterval(state.interval);
-    state.running = false;
-    timerState[ei] = state;
-    document.getElementById(`timerbtn-${ei}`).textContent = 'Start';
+  const s = timerState[ei] || {};
+  if (!s.duration) s.duration = 45;
+  if (s.remaining === undefined) s.remaining = s.duration;
+  if (s.running) {
+    clearInterval(s.interval);
+    s.running = false;
+    timerState[ei] = s;
+    document.getElementById(`tbtn-${ei}`).textContent = 'Start';
     document.getElementById(`timer-${ei}`).classList.remove('running');
   } else {
-    if (!state.duration) state.duration = 45;
-    if (!state.remaining && state.remaining !== 0) state.remaining = state.duration;
-    state.running = true;
-    timerState[ei] = state;
-    document.getElementById(`timerbtn-${ei}`).textContent = 'Pause';
+    s.running = true;
+    timerState[ei] = s;
+    document.getElementById(`tbtn-${ei}`).textContent = 'Pause';
     document.getElementById(`timer-${ei}`).classList.add('running');
-    state.interval = setInterval(() => {
-      state.remaining--;
-      const display = document.getElementById(`timer-${ei}`);
-      if (!display) { clearInterval(state.interval); return; }
-      if (state.remaining <= 0) {
-        clearInterval(state.interval);
-        state.running = false;
-        state.remaining = state.duration;
-        display.textContent = 'GO!';
-        display.classList.remove('running');
-        document.getElementById(`timerbtn-${ei}`).textContent = 'Start';
-        setTimeout(() => { if (display) display.textContent = formatTime(state.duration); }, 1500);
-        try { if (window.navigator && navigator.vibrate) navigator.vibrate([200,100,200]); } catch(e) {}
+    s.interval = setInterval(() => {
+      s.remaining--;
+      const disp = document.getElementById(`timer-${ei}`);
+      if (!disp) { clearInterval(s.interval); return; }
+      if (s.remaining <= 0) {
+        clearInterval(s.interval);
+        s.running = false;
+        s.remaining = s.duration;
+        disp.textContent = 'GO!';
+        disp.classList.remove('running');
+        document.getElementById(`tbtn-${ei}`).textContent = 'Start';
+        try { navigator.vibrate && navigator.vibrate([200,100,200]); } catch(e){}
+        setTimeout(() => { if (disp) disp.textContent = formatTime(s.duration); }, 1500);
       } else {
-        display.textContent = formatTime(state.remaining);
+        disp.textContent = formatTime(s.remaining);
       }
     }, 1000);
   }
 }
 
 function resetTimer(ei) {
-  const state = timerState[ei] || {};
-  if (state.interval) clearInterval(state.interval);
-  state.running = false;
-  const dur = state.duration || 45;
-  state.remaining = dur;
-  timerState[ei] = state;
-  const display = document.getElementById(`timer-${ei}`);
-  const btn = document.getElementById(`timerbtn-${ei}`);
-  if (display) { display.textContent = formatTime(dur); display.classList.remove('running'); }
+  const s = timerState[ei] || {};
+  if (s.interval) clearInterval(s.interval);
+  s.running = false;
+  const dur = s.duration || 45;
+  s.remaining = dur;
+  timerState[ei] = s;
+  const disp = document.getElementById(`timer-${ei}`);
+  const btn = document.getElementById(`tbtn-${ei}`);
+  if (disp) { disp.textContent = formatTime(dur); disp.classList.remove('running'); }
   if (btn) btn.textContent = 'Start';
 }
 
-function renderTournamentView(main) {
-  main.innerHTML = `
-    <div class="tournament-view">
-      <div class="tournament-banner">
-        <div class="t-label">Weekend</div>
-        <div class="t-title">TOURNAMENT</div>
-      </div>
-      <div class="matchday-section">
-        <div class="matchday-heading">Match Day Protocol</div>
-        ${MATCHDAY.map(m => `
-          <div class="matchday-card">
-            <div class="matchday-card-title">${m.title}</div>
-            <div class="matchday-card-desc">${m.desc}</div>
-          </div>
-        `).join('')}
-      </div>
-    </div>`;
-}
-
-// INIT
 renderDayScroll();
 renderContent();
 </script>
